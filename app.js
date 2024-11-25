@@ -42,4 +42,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+const PORT = process.env.PORT || 3000;
+console.log(`Server is running on port ${PORT}: http://localhost:${PORT}`);
+
 module.exports = app;
