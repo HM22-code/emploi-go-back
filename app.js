@@ -4,7 +4,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var { specs, swaggerUi } = require('./swagger');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const db = require("./config/db");
+
+// start db
+db.authenticate()
+  .then(result => {
+    console.log("Connection established.");
+  })
+  .catch(error => {
+    console.log("Unable to connect to db: ", error);
+  });
 
 // routers setup
 var indexRouter = require('./routes/indexRouter');
