@@ -13,4 +13,13 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   storage: DB_DIALECT === 'sqlite' ? DB_STORAGE : undefined,
 });
 
+sequelize.sync({ force: false })
+.then(() => {
+    console.log('Database synchronized');
+})
+.catch((error) => {
+    console.error('Failed to synchronize database:', error);
+});
+
+
 module.exports = sequelize;
