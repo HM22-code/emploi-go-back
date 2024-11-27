@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const User = require('../models/user');
+var userController = require('../controllers/userController');
 
 /**
  * @swagger
@@ -14,14 +14,7 @@ const User = require('../models/user');
  *       '500':
  *         description: Internal server error
  */
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch users.' });
-  }
-});
+router.get('/', userController.findAll);
 
 /**
  * @swagger
@@ -44,18 +37,7 @@ router.get('/', async (req, res) => {
  *       '500':
  *         description: Internal server error
  */
-router.get('/:id', async (req, res) => {
-  try {
-    const user = await User.findByPk(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: 'User not found.' });
-    } else {
-      res.json(user);
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch user.' });
-  }
-});
+router.get('/:id', userController.find);
 
 /**
  * @swagger
@@ -69,14 +51,7 @@ router.get('/:id', async (req, res) => {
  *       '500':
  *         description: Internal server error
  */
-router.post('/', async (req, res) => {
-  try {
-    const user = await User.create(req.body);
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to create user.' });
-  }
-});
+router.post('/', userController.create);
 
 /**
  * @swagger
@@ -99,21 +74,7 @@ router.post('/', async (req, res) => {
  *       '500':
  *         description: Internal server error
  */
-router.put('/:id', async (req, res) => {
-  try {
-    const [updatedRowsCount] = await User.update(req.body, {
-        where: { id: req.params.id }
-    });
-    if (updatedRowsCount === 0) {
-      res.status(404).json({ message: 'User not found.' });
-    } else {
-      const user = await User.findByPk(req.params.id);
-      res.json(user);
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to update user.' });
-  }
-});
+router.put('/:id', userController.update);
 
 /**
  * @swagger
@@ -136,17 +97,6 @@ router.put('/:id', async (req, res) => {
  *       '500':
  *         description: Internal server error
  */
-router.delete('/:id', async (req, res) => {
-  try {
-    const deletedRowsCount = await User.destroy({ where: { id: req.params.id } });
-    if (deletedRowsCount === 0) {
-      res.status(404).json({ message: 'User not found.' });
-    } else {
-      res.json({ message: 'User deleted successfully.' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to delete user.' });
-  }
-});
+router.delete('/:id', userController.delete);
 
 module.exports = router;
