@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/userController');
+const auth = require('../middleware/authJWT');
 
 /**
  * @swagger
@@ -14,7 +15,7 @@ var userController = require('../controllers/userController');
  *       '500':
  *         description: Internal server error
  */
-router.get('/', userController.findAll);
+router.get('/', auth, userController.findAll);
 
 /**
  * @swagger
@@ -37,7 +38,7 @@ router.get('/', userController.findAll);
  *       '500':
  *         description: Internal server error
  */
-router.get('/:id', userController.find);
+router.get('/:id', auth, userController.find);
 
 /**
  * @swagger
@@ -74,7 +75,7 @@ router.post('/', userController.create);
  *       '500':
  *         description: Internal server error
  */
-router.put('/:id', userController.update);
+router.put('/:id', auth, userController.update);
 
 /**
  * @swagger
@@ -97,6 +98,6 @@ router.put('/:id', userController.update);
  *       '500':
  *         description: Internal server error
  */
-router.delete('/:id', userController.delete);
+router.delete('/:id', auth, userController.delete);
 
 module.exports = router;
