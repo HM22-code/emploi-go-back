@@ -14,12 +14,12 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 });
 
 sequelize.sync({ force: false })
-.then(() => {
+  .then(() => {
     console.log('Database synchronized');
-})
-.catch((error) => {
+  })
+  .catch((error) => {
     console.error('Failed to synchronize database:', error);
-});
+  });
 
 
 module.exports = sequelize;
