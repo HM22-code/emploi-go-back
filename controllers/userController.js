@@ -1,6 +1,7 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt')
 
-// FindAll
+// Find all users
 exports.findAll = async (req, res) => {
   try {
     const users = await User.findAll();
@@ -10,10 +11,10 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Find
+// Find user by id
 exports.find = async (req, res) => {
   try {
-    const user = await User.findOne({where : {id : req.params.id}});
+    const user = await User.findByPk(req.params.id);
     if (!user) {
       res.status(404).json({ message: 'User not found.' });
     } else {
@@ -24,9 +25,10 @@ exports.find = async (req, res) => {
   }
 };
 
-// Create
+// Create User
 exports.create = async (req, res) => {
   try {
+    req.body.password = await bcrypt.hash(req.body.password, 10);
     const user = await User.create(req.body);
     res.json(user);
   } catch (error) {
@@ -34,9 +36,10 @@ exports.create = async (req, res) => {
   }
 };
 
-// Update
+// Update User
 exports.update = async (req, res) => {
   try {
+    req.body.password = await bcrypt.hash(req.body.password, 10);
     const [updatedRowsCount] = await User.update(req.body, {
         where: { id: req.params.id }
     });
@@ -51,7 +54,7 @@ exports.update = async (req, res) => {
   }
 };
 
-// Delete
+// Delete User
 exports.delete = async (req, res) => {
   try {
     const deletedRowsCount = await User.destroy({ where: { id: req.params.id } });
