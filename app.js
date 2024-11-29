@@ -26,10 +26,6 @@ var app = express();
 // global configuration access setup
 dotenv.config()
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 // middlewares setup
 app.use(logger('dev'));
 app.use(express.json());
