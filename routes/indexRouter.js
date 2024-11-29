@@ -10,8 +10,8 @@ var router = express.Router();
  *       200:
  *         description: A successful response
  */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', (req, res, next) => {
+  res.render('index');
 });
 
 module.exports = router;

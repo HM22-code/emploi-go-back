@@ -1,15 +1,14 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  try {
-      const token = req.headers.authorization.split(' ')[1];
-      const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-      const userId = decodedToken.userId;
-      req.auth = {
-        userId: userId
-      };
-  next();
-  } catch(error) {
-      es.status(401).json({ message: 'Invalid credentials.' });
+  const jwtToken = req.cookies["jwtToken"];
+  if (!jwtToken) {
+    return res.status(401).json({ message: 'Invalid credentials.' });
   }
+  jwt.verify(jwtToken, process.env.TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Invalid credentials.' });
+    }
+    next();
+  });
 };

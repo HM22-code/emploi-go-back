@@ -2,27 +2,13 @@ var express = require('express');
 var router = express.Router();
 var authController = require('../controllers/authController');
 
-/* GET login page. */
-router.get('/login', function(req, res, next) {
-  res.render('login');
-});
-
-/* POST login form. */
+/* POST login. */
 router.post('/login', authController.login);
 
-/* GET logout page. */
-router.get('/logout', function(req, res, next) {
-  res.render('logout');
-});
+/* POST logout. */
+router.post('/logout', authController.logout);
 
-/* GET signup page. */
-router.get('/signup', function(req, res, next) {
-  res.render('signup');
-});
-
-/* POST signup form. */
-router.post('/signup', function(req, res, next) {
-  res.json({ message: 'Signup' });
-});
+/* POST signup. */
+router.post('/signup', authController.signup);
 
 module.exports = router;
