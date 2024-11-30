@@ -16,7 +16,7 @@ exports.login = (req, res) => {
             return res.status(401).json({ message: 'Incorrect username or password' });
           }
           // generate JWT token
-          const jwtToken = jwt.sign({ id: user.id },process.env.TOKEN_SECRET,{ expiresIn: '24h' })
+          const jwtToken = jwt.sign({ id: user.id, role: user.role },process.env.TOKEN_SECRET,{ expiresIn: '24h' })
           res.cookie("jwtToken", jwtToken, { httpOnly: true, secure: true });
           res.json({ token: jwtToken });
         })
@@ -33,7 +33,7 @@ exports.logout = (req, res) => {
 exports.signup = (req, res) => {
   try {
     req.body.password = bcrypt.hash(req.body.password, 10);
-    const user = User.create(req.body);
+    const user = User.create({ username: req.body.username, email: req.body.email, password: req.body.password });
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Failed to create user.' });
