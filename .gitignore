@@ -63,3 +63,11 @@ typings/
 # db
 *.sqlite
 data
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/.vscode/*
+!/.vscode/extensions.json

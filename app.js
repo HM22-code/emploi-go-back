@@ -6,6 +6,7 @@ var logger = require('morgan');
 var { specs, swaggerUi } = require('./swagger');
 const dotenv = require('dotenv');
 const db = require("./config/db");
+const cors =  require('cors');
 
 // start db
 db.authenticate()
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/', indexRouter);
 app.use('/auth', authRouter)
