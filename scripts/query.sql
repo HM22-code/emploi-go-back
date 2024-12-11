@@ -1,41 +1,81 @@
 /*
 Etablissement
 */
+
 --SELECT * FROM Etablissement WHERE libelleCommuneEtablissement = "DIJON";
+
 --SELECT siret, denominationUsuelleEtablissement, enseigne1Etablissement, numeroVoieEtablissement, typeVoieEtablissement, libelleVoieEtablissement, codePostalEtablissement, libelleCommuneEtablissement, activitePrincipaleEtablissement, trancheEffectifsEtablissement FROM Etablissement WHERE codePostalEtablissement LIKE "21%" AND etatAdministratifEtablissement = "A" AND caractereEmployeurEtablissement = "O";
-SELECT siret, denominationUsuelleEtablissement, enseigne1Etablissement, enseigne2Etablissement, enseigne3Etablissement, numeroVoieEtablissement, typeVoieEtablissement, libelleVoieEtablissement, codePostalEtablissement, libelleCommuneEtablissement, activitePrincipaleEtablissement, trancheEffectifsEtablissement FROM Etablissement WHERE libelleCommuneEtablissement = "DIJON" AND etatAdministratifEtablissement = "A" AND caractereEmployeurEtablissement = "O" AND statutDiffusionEtablissement = "O" AND trancheEffectifsEtablissement IS NOT NULL;
+
+--SELECT siret, denominationUsuelleEtablissement, enseigne1Etablissement, enseigne2Etablissement, enseigne3Etablissement, numeroVoieEtablissement, typeVoieEtablissement, libelleVoieEtablissement, codePostalEtablissement, libelleCommuneEtablissement, activitePrincipaleEtablissement, trancheEffectifsEtablissement FROM Etablissement WHERE libelleCommuneEtablissement = "DIJON" AND etatAdministratifEtablissement = "A" AND caractereEmployeurEtablissement = "O" AND statutDiffusionEtablissement = "O" AND trancheEffectifsEtablissement IS NOT NULL;
+
+--SELECT siret, enseigne1Etablissement, numeroVoieEtablissement, typeVoieEtablissement, libelleVoieEtablissement, codePostalEtablissement, libelleCommuneEtablissement, activitePrincipaleEtablissement, trancheEffectifsEtablissement FROM Etablissement WHERE codePostalEtablissement LIKE "21___" AND etatAdministratifEtablissement = "A" AND caractereEmployeurEtablissement = "O" AND statutDiffusionEtablissement = "O" AND trancheEffectifsEtablissement IS NOT NULL AND enseigne1Etablissement IS NOT NULL;
+
 /*
 Geolocalisation
 */
+
 --SELECT siret, x_longitude, y_latitude FROM Geolocalisation;
+
 /*
 Etablissement JOIN Geolocalisation
 */
-/*
-SELECT 
-Geolocalisation.x_longitude, 
-Geolocalisation.y_latitude, 
-Geolocalisation.siret, 
-Etablissement.siret, 
-Etablissement.denominationUsuelleEtablissement, 
-Etablissement.enseigne1Etablissement, 
-Etablissement.enseigne2Etablissement, 
-Etablissement.enseigne3Etablissement, 
-Etablissement.numeroVoieEtablissement, 
-Etablissement.typeVoieEtablissement, 
-Etablissement.libelleVoieEtablissement, 
-Etablissement.codePostalEtablissement, 
-Etablissement.libelleCommuneEtablissement, 
-Etablissement.activitePrincipaleEtablissement, 
-Etablissement.nomenclatureActivitePrincipaleEtablissement, 
-Etablissement.trancheEffectifsEtablissement 
-FROM Etablissement JOIN Geolocalisation ON Etablissement.siret = Geolocalisation.siret
-WHERE Etablissement.codePostalEtablissement LIKE "21%" 
-AND Etablissement.etatAdministratifEtablissement = "A" 
+
+--SELECT * FROM Geolocalisation JOIN Etablissement ON Geolocalisation.siret = Etablissement.siret;
+
+
+SELECT
+Geolocalisation.x_longitude,
+Geolocalisation.y_latitude,
+Geolocalisation.siret,
+Etablissement.enseigne1Etablissement,
+Etablissement.numeroVoieEtablissement,
+Etablissement.typeVoieEtablissement,
+Etablissement.libelleVoieEtablissement,
+Etablissement.codePostalEtablissement,
+Etablissement.libelleCommuneEtablissement,
+Etablissement.activitePrincipaleEtablissement,
+ActiviteNIV5.Libelle,
+ActiviteNIV1.Code,
+ActiviteNIV1.Libelle,
+EffectifsCode.description
+FROM Etablissement
+JOIN Geolocalisation ON Geolocalisation.siret = Etablissement.siret
+LEFT JOIN EffectifsCode ON EffectifsCode.code = Etablissement.trancheEffectifsEtablissement
+LEFT JOIN ActiviteNiveau ON ActiviteNiveau.NIV5 = Etablissement.activitePrincipaleEtablissement
+LEFT JOIN ActiviteNIV5 ON ActiviteNiveau.NIV5 = ActiviteNIV5.Code
+LEFT JOIN ActiviteNIV4 ON ActiviteNiveau.NIV4 = ActiviteNIV4.Code
+LEFT JOIN ActiviteNIV3 ON ActiviteNiveau.NIV3 = ActiviteNIV3.Code
+LEFT JOIN ActiviteNIV2 ON ActiviteNiveau.NIV2 = ActiviteNIV2.Code
+LEFT JOIN ActiviteNIV1 ON ActiviteNiveau.NIV1 = ActiviteNIV1.Code
+WHERE Etablissement.codePostalEtablissement LIKE "21___"
+AND Etablissement.etatAdministratifEtablissement = "A"
 AND Etablissement.caractereEmployeurEtablissement = "O"
 AND Etablissement.statutDiffusionEtablissement = "O"
-AND Etablissement.libelleCommuneEtablissement = "DIJON";
+AND Etablissement.trancheEffectifsEtablissement IS NOT NULL
+AND Etablissement.enseigne1Etablissement IS NOT NULL;
+
+
+--SELECT * FROM ActiviteNiveau;
+
+--SELECT * FROM ActiviteNIV1;
+
+--SELECT * FROM ActiviteNIV2;
+
+--SELECT * FROM ActiviteNIV3;
+
+--SELECT * FROM ActiviteNIV4;
+
+--SELECT * FROM ActiviteNIV5;
+
+/*
+SELECT * FROM ActiviteNiveau
+JOIN ActiviteNIV5 ON ActiviteNiveau.NIV5 = ActiviteNIV5.Code
+JOIN ActiviteNIV4 ON ActiviteNiveau.NIV4 = ActiviteNIV4.Code
+JOIN ActiviteNIV3 ON ActiviteNiveau.NIV3 = ActiviteNIV3.Code
+JOIN ActiviteNIV2 ON ActiviteNiveau.NIV2 = ActiviteNIV2.Code
+JOIN ActiviteNIV1 ON ActiviteNiveau.NIV1 = ActiviteNIV1.Code
 */
+
 /*
 CREATE TABLE EffectifsCode (
     code VARCHAR(2) PRIMARY KEY,
